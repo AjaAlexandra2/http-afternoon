@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import axios from 'axios';// import axios
 import { Link } from 'react-router-dom';
 import Formated from './subcomponents/Formated';
 
-// import axios
+
 
 class Blog extends Component{
     constructor(){
@@ -12,13 +13,19 @@ class Blog extends Component{
         }
     }
 
-    // insert componentWillMount method
+    componentDidMount(){
+    axios.get(`/api/blog/${this.props.match.params.id}`).then(results=>{
+        this.setState({
+            blog: results.data
+        })
+    }).catch(console.log)
+}// insert componentWillMount method
 
-    
+
     render(){
         const blog = this.state.blog;
         return(
-            
+
             <div className='content blog-content' >
                     <div className="blog-img" style={{backgroundImage: `url(${blog.image})`, backgroundSize:'cover'}}>
                         <h1>{blog.title}</h1>

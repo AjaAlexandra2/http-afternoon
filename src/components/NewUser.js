@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 //import axios
-import axios from 'axios'
+import axios from 'axios';
 
 class NewUser extends Component{
     constructor(){
@@ -12,14 +12,34 @@ class NewUser extends Component{
             desc: ''
         }
     }
-    
-    // insert addUser
+
+    addUser(){
+       axios.post('/api/users', this.state).then(response=>{
+           console.log(response)
+           let user = response.data
+           this.props.history.push(`/user/${user.id}`)
+       })
+   }// insert addUser
 
 
-    // insert updateUser    
+   updateUser(){
+    let id = this.props.match.params.id
+    axios.put(`/api/user/${id}`, this.state).then(response=>{
+        console.log(response)
+        let user = response.data
+        this.props.history.push(`/user/${user.id}`)
+    })
+}
+// insert updateUser
 
 
-    // insert deleteUser
+deleteUser(){
+   let id = this.props.match.params.id
+   axios.delete(`api/user/${id}`).then(response=>{
+       this.props.history.push(`/search`)
+   })
+}
+  // insert deleteUser
 
 
     render(){
@@ -31,7 +51,7 @@ class NewUser extends Component{
                         {
                             this.state.img
                             ?
-                            <img src={this.state.img} alt="profile pic"/> 
+                            <img src={this.state.img} alt="profile pic"/>
                             :
                             <div className="pic-placeholder">No Image Yet</div>
                         }
@@ -79,7 +99,7 @@ class NewUser extends Component{
 
     componentWillReceiveProps(newProps){
         if (newProps.match.params.hasOwnProperty('id')){
-            let id = newProps.match.params.id    
+            let id = newProps.match.params.id
             axios.get(`/api/user/${id}`).then(response=>{
                 this.setState({
                     id: id,
